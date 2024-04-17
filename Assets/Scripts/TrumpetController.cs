@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class TrumpetController : MonoBehaviour
 {
+    [SerializeField]
     private GameObject valve1;
+    [SerializeField]
     private GameObject valve2;
+    [SerializeField]
     private GameObject valve3;
 
     [SerializeField]
@@ -14,4 +17,9 @@ public class TrumpetController : MonoBehaviour
     private float maxValvePos;
     [SerializeField]
     private float dootCoolDown;
+
+    private void Doot()
+    {
+
+    }
 }
