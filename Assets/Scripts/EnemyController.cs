@@ -26,7 +26,7 @@ namespace Enemy
         [HideInInspector]
         public bool dead = false;
         private GameController controller;
-        private bool canDamagePlayer;
+        private bool canDamagePlayer = true;
         private float damageDelay;
         private marker marker;
         [SerializeField]
@@ -42,7 +42,6 @@ namespace Enemy
             {
                 bone.isKinematic = true;
             }
-            canDamagePlayer = true;
             animator = GetComponent<Animator>();
             agent = GetComponent<NavMeshAgent>();
             controller = GameObject.FindWithTag("GameController").GetComponent<GameController>();
@@ -88,21 +87,24 @@ namespace Enemy
 
         public void Die(string noteStr)
         {
-            if (!dead)
+            if (dead)
             {
-                if (noteStr == note)
-                {
-                    dead = true;
-                    foreach (var bone in bones)
-                    {
-                        bone.isKinematic = false;
-                    }
-                    animator.enabled = false;
-                    controller.UpdateEnemyCounter();
-                    compass.RemoveMarker(marker);
-                    capsuleCollider.enabled = false;
-                }
+                return;
             }
+            if (noteStr != note)
+            {
+                return;
+            }
+            dead = true;
+            foreach (var bone in bones)
+            {
+                bone.isKinematic = false;
+            }
+            animator.enabled = false;
+            controller.UpdateEnemyCounter();
+            compass.RemoveMarker(marker);
+            capsuleCollider.enabled = false;
+            
         }
 
         private void OnTriggerStay(Collider other)

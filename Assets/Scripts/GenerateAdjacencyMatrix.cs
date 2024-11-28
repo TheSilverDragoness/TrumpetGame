@@ -271,45 +271,54 @@ public class GenerateAdjacencyMatrix : MonoBehaviour
 
     private void ApplyRule(List<Node> nl)
     {
-        if (minConnections != 0 && maxConnections != 0)
+        if (minConnections == 0 || maxConnections == 0)
         {
-            foreach (Node node in nl)
-            {
-                for (int i = node.connections.Count - 1; i >= 0; i--)
-                {
-                    Node connectedNode = node.connections[i];
-                    if (node.connections.Count > maxConnections || connectedNode.connections.Count > maxConnections)
-                    {
-                        node.connections.Remove(connectedNode);
-                        connectedNode.connections.Remove(node);
+            return;
+        }
 
-                        if (node.connections.Count <= maxConnections)
-                        {
-                            break;
-                        }
-                    }
+        foreach (Node node in nl)
+        {
+            for (int i = node.connections.Count - 1; i >= 0; i--)
+            {
+                Node connectedNode = node.connections[i];
+
+                if (node.connections.Count !> maxConnections && connectedNode.connections.Count !> minConnections)
+                {
+                    continue;
+                }
+
+                node.connections.Remove(connectedNode);
+                connectedNode.connections.Remove(node);
+
+                if (node.connections.Count <= maxConnections)
+                {
+                    break;
                 }
             }
-            foreach (Node node in nl)
+        }
+        foreach (Node node in nl)
+        {
+            while (node.connections.Count < minConnections)
             {
-                while (node.connections.Count < minConnections)
+                for (int i = 0; i < nl.Count; i++)
                 {
-                    for (int i = 0; i < nl.Count; i++)
+                    Node potentialConnection = nl[i];
+                  
+                    if (node.connections.Contains(potentialConnection) || node == potentialConnection)
                     {
-                        Node potentialConnection = nl[i];
-                        if (!node.connections.Contains(potentialConnection) && node != potentialConnection)
-                        {
-                            node.connections.Add(potentialConnection);
-                            potentialConnection.connections.Add(node);
-
-                            Debug.Log("Connections: " + node.connections.Count);
-
-                            if (node.connections.Count >= minConnections)
-                            {
-                                break;
-                            }
-                        }
+                        continue;
                     }
+                    
+                    node.connections.Add(potentialConnection);
+                    potentialConnection.connections.Add(node);
+
+                    Debug.Log("Connections: " + node.connections.Count);
+
+                    if (node.connections.Count >= minConnections)
+                    {
+                        break;
+                    }
+                    
                 }
             }
         }
