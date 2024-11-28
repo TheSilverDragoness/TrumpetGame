@@ -1,4 +1,5 @@
 using Enemy;
+using Player;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -10,7 +11,7 @@ using UnityEngine.SceneManagement;
 public class GameController : MonoBehaviour
 {
     [SerializeField]
-    private Transform[] spawnPoints;
+    public List<Transform> spawnPoints;
     [SerializeField]
     private GameObject[] waveList;
     [SerializeField]
@@ -22,11 +23,15 @@ public class GameController : MonoBehaviour
     private GameObject winScreen;
     [SerializeField]
     private GameObject pauseScreen;
+    [SerializeField] 
+    private GameObject attributionsScreen;
+    [SerializeField]
+    private GameObject helpScreen;
 
     [SerializeField]
     private GameObject healthItem;
-    [SerializeField]
-    private Transform healthItemSpawn;
+    [HideInInspector]
+    public Transform healthItemSpawn;
 
     [SerializeField]
     private TMP_Text waveNumber;
@@ -36,6 +41,14 @@ public class GameController : MonoBehaviour
     private TMP_Text waveCountdown;
     [SerializeField]
     private GameObject healthBar;
+    [SerializeField]
+    private GameObject compassUI;
+
+    [SerializeField]
+    private GameObject gameUI;
+
+    [SerializeField]
+    private int maxEnemies;
 
     private GameObject curHealthItem;
     private GameObject[] spawnList;
@@ -48,13 +61,28 @@ public class GameController : MonoBehaviour
     private int enemyNum = 1;
     private bool firstWave = true;
     private bool waveInProgress;
+    private bool isPaused;
 
-    private void Start()
+    public bool gameStarted;
+
+    private void Awake()
     {
+        isPaused = false;
+        gameStarted = false;
+        gameUI.SetActive(false);
+        spawnPoints.Clear();
+        spawnPoints = new List<Transform>();
+    }
+    public void GameStart()
+    {
+        gameStarted = true;
+        gameUI.SetActive(true);
         Time.timeScale = 1;
         loseScreen.SetActive(false);
         winScreen.SetActive(false);
         pauseScreen.SetActive(false);
+        attributionsScreen.SetActive(false);
+        helpScreen.SetActive(false);
         enemyCounter.gameObject.SetActive(false);
         healthBar.SetActive(true);
         spawnList = waveList[waveNum].gameObject.GetComponent<Wave>().enemies;
@@ -65,7 +93,11 @@ public class GameController : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Escape))
+        if (!gameStarted)
+        {
+            return;
+        }
+        if(Input.GetKeyDown(KeyCode.Escape) && !isPaused)
         {
             Pause();
         }
@@ -83,7 +115,7 @@ public class GameController : MonoBehaviour
         waveCountdown.gameObject.SetActive(false);
         enemyCounter.gameObject.SetActive(true);
         Debug.Log("NewEnemy called");
-        int k = Random.Range(0, spawnPoints.Length);
+        int k = Random.Range(0, spawnPoints.Count);
         
         if (enemyNum < spawnList.Length)
         {
@@ -97,9 +129,10 @@ public class GameController : MonoBehaviour
 
     IEnumerator SpawnEnemy(Transform spawnPoint, GameObject enemy)
     {
-        Debug.Log("SpawnEnemy called");
+        Debug.LogWarning("SpawnEnemy called");
         yield return new WaitForSeconds(spawnDelay);
         GameObject newEnemy = Instantiate(enemy, spawnPoint.position, Quaternion.identity);
+        newEnemy.GetComponent<EnemyController>().SetUpEnemy(compassUI.GetComponentInChildren<Compass>());
         Debug.Log(newEnemy + " spawned");
         enemiesList.Add(newEnemy);
         enemyNum++;
@@ -202,10 +235,12 @@ public class GameController : MonoBehaviour
 
     public void Pause()
     {
+        isPaused = true;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.Confined;
         healthBar.SetActive(false);
         pauseScreen.SetActive(true);
+        compassUI.SetActive(false);
         Time.timeScale = 0;
     }
 
@@ -215,6 +250,8 @@ public class GameController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         pauseScreen.SetActive(false);
         healthBar.SetActive(true);
+        compassUI.SetActive(true);
+        isPaused = false;
         Time.timeScale = 1;
     }
 
@@ -227,6 +264,30 @@ public class GameController : MonoBehaviour
     public void ExitGame()
     {
         Application.Quit();
+    }
+
+    public void OpenAttributions()
+    {
+        pauseScreen.SetActive(false);
+        attributionsScreen.SetActive(true);
+    }
+
+    public void CloseAttributions()
+    {
+        attributionsScreen.SetActive(false);
+        pauseScreen.SetActive(true);
+    }
+
+    public void OpenHelp()
+    {
+        pauseScreen.SetActive(false);
+        helpScreen.SetActive(true);
+    }
+
+    public void CloseHelp()
+    {
+        helpScreen.SetActive(false);
+        pauseScreen.SetActive(true);
     }
 
     private void UpdateTimer(float timeLeft)
@@ -253,5 +314,10 @@ public class GameController : MonoBehaviour
             curEnemyDooted++;
             enemyCounter.text = "Enemies Dooted: " + curEnemyDooted.ToString() + "/" + spawnList.Length.ToString();
         }
+    }
+
+    public void SetPlayerCameraSensitivity(float sensitivity)
+    {
+        FindObjectOfType<PlayerCamera>().SetMouseSensitivity(sensitivity);
     }
 }

@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 
 namespace Player
 {
+    [RequireComponent(typeof(Rigidbody))]
     public class PlayerController : MonoBehaviour
     {
         [SerializeField]

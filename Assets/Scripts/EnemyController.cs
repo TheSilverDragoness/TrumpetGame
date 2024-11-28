@@ -28,9 +28,14 @@ namespace Enemy
         private GameController controller;
         private bool canDamagePlayer;
         private float damageDelay;
+        private marker marker;
+        [SerializeField]
+        private Compass compass;
+        private CapsuleCollider capsuleCollider;
 
         private void Start()
         {
+            capsuleCollider = GetComponent<CapsuleCollider>();
             player = GameObject.FindWithTag("Player").transform;
             bones = GetComponentsInChildren<Rigidbody>();
             foreach (var bone in bones)
@@ -41,6 +46,21 @@ namespace Enemy
             animator = GetComponent<Animator>();
             agent = GetComponent<NavMeshAgent>();
             controller = GameObject.FindWithTag("GameController").GetComponent<GameController>();
+        }
+
+        public void SetUpEnemy(Compass _compass)
+        {
+            compass = _compass;
+            marker = GetComponent<marker>();
+            if (compass != null && marker != null) 
+            {
+                Debug.LogWarning("Marker added");
+                compass.AddQuestMarker(marker);
+            }
+            else
+            {
+                Debug.LogError("No Marker");
+            }
         }
 
         private void Update()
@@ -79,6 +99,8 @@ namespace Enemy
                     }
                     animator.enabled = false;
                     controller.UpdateEnemyCounter();
+                    compass.RemoveMarker(marker);
+                    capsuleCollider.enabled = false;
                 }
             }
         }

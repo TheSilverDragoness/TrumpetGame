@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1188510947531324017}
   - component: {fileID: 2463918203119120118}
   - component: {fileID: 6659525735879953618}
+  - component: {fileID: -3731127865546593114}
   m_Layer: 0
   m_Name: HealthItem
   m_TagString: Untagged
@@ -119,3 +120,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   healAmount: 50
+--- !u!114 &-3731127865546593114
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8602906554193022790}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 459eb4750911c494295e81ca774ee656, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  icon: {fileID: 0}

@@ -10,11 +10,9 @@ namespace Player
         [SerializeField]
         private float maxHealth;
 
-        [SerializeField]
-        private GameObject healthBar;
+        public GameObject healthBar;
 
-        [SerializeField]
-        private GameController gameController;
+        public GameController gameController;
 
         private float curHealth;
 

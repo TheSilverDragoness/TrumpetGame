@@ -93,7 +93,7 @@ namespace Player
 
             ShowNoteSprite();
 
-            Ray ray = new Ray(transform.position, transform.forward);
+            Ray ray = new Ray(cam.transform.position, cam.transform.forward);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, dootLayerMask))
             {

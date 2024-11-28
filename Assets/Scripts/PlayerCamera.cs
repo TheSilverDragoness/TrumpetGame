@@ -21,7 +21,12 @@ namespace Player
             Cursor.visible = false;
         }
 
-        void Update()
+        public void SetMouseSensitivity(float sensitivity)
+        {
+            cameraSensitivity = sensitivity;
+        }
+
+        void LateUpdate()
         {
             float mouseX = Input.GetAxisRaw("Mouse X") * Time.deltaTime * cameraSensitivity;
             float mouseY = Input.GetAxisRaw("Mouse Y") * Time.deltaTime * cameraSensitivity;

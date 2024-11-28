@@ -14,7 +14,7 @@ namespace player
         private void Start()
         {
             Destroy(gameObject, duration);
-            cam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+            cam = GameObject.FindGameObjectWithTag("PlayerCam").GetComponent<Camera>();
         }
 
         private void Update()
