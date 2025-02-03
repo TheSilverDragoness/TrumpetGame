@@ -33,6 +33,7 @@ namespace Player
         Vector3 direction;
 
         private Vector3 wallNormal;
+        private bool jumpPrePressed;
 
         private void Start()
         {
@@ -52,6 +53,7 @@ namespace Player
                 canWallJump = true;
                 isAgainstWall = false;
                 wallNormal = Vector3.zero;
+                jumpPrePressed = false;
             }
             else
             {
@@ -68,9 +70,21 @@ namespace Player
                 {
                     WallJumphandler();
                 }
+                if (!isOnGround && canWallJump)
+                {
+                    jumpPrePressed = true;
+                    StartCoroutine(disableBool(jumpPrePressed, 0.5f));
+                }
             }
 
             InputHandler();
+        }
+
+        IEnumerator disableBool(bool b, float t) 
+        {
+            yield return new WaitForSeconds(t);
+         
+            b = false;
         }
 
         private void FixedUpdate()
@@ -123,6 +137,11 @@ namespace Player
                 wallNormal = contact.normal;
                 isAgainstWall = true;
                 Debug.Log("Collided with wall");
+
+                if (jumpPrePressed)
+                {
+                    WallJumphandler();
+                }
             }
         }
     }
