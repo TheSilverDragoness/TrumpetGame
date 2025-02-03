@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -21,13 +22,17 @@ namespace Player
         private float jumpDelay;
 
         private bool canJump;
+        private bool canWallJump;
         private bool isOnGround;
+        private bool isAgainstWall;
 
         private Rigidbody rb;
 
         private float inputX;
         private float inputY;
         Vector3 direction;
+
+        private Vector3 wallNormal;
 
         private void Start()
         {
@@ -44,15 +49,25 @@ namespace Player
             {
                 rb.drag = drag;
                 canJump = true;
+                canWallJump = true;
+                isAgainstWall = false;
+                wallNormal = Vector3.zero;
             }
             else
             {
                 rb.drag = 0;
             }
 
-            if (Input.GetKeyDown(KeyCode.Space) && canJump && isOnGround)
+            if (Input.GetKeyDown(KeyCode.Space))
             {
-                JumpHandler();
+                if (canJump && isOnGround)
+                {
+                    JumpHandler();
+                }
+                if (canWallJump && !isOnGround && isAgainstWall)
+                {
+                    WallJumphandler();
+                }
             }
 
             InputHandler();
@@ -80,17 +95,34 @@ namespace Player
 
         private void JumpHandler()
         {
+            Debug.Log("Wall Jump Handler called");
             canJump = false;
-            rb.velocity = new Vector3(rb.velocity.x, 0, rb.velocity.y);
 
+            rb.AddForce(transform.up * jumpForce, ForceMode.Force);
+        }
+
+        private void WallJumphandler()
+        {
+            Debug.Log("Wall Jump Handler called");
+            canWallJump = false;
+            isAgainstWall = false;
+
+            rb.AddForce((wallNormal) * jumpForce, ForceMode.Force);
             rb.AddForce(transform.up * jumpForce, ForceMode.Force);
         }
 
         private void OnCollisionEnter(Collision collision)
         {
-            if(collision.transform.tag == "Ground")
+            if (collision.transform.tag == "Ground")
             {
                 isOnGround = true;
+            }
+            if (collision.transform.tag == "Wall")
+            {
+                ContactPoint contact = collision.GetContact(0);
+                wallNormal = contact.normal;
+                isAgainstWall = true;
+                Debug.Log("Collided with wall");
             }
         }
     }
