@@ -6,13 +6,13 @@ using UnityEngine;
 public class HealthItem : MonoBehaviour
 {
     [SerializeField]
-    private float healAmount;
+    private int healAmount;
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        if (other.TryGetComponent(out IDamageable damageableObject))
         {
-            other.GetComponent<Health>().Heal(healAmount);
+            damageableObject.HealDamage(healAmount);
             Destroy(gameObject);
         }
     }

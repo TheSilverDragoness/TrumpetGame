@@ -73,6 +73,17 @@ public class GameController : MonoBehaviour
         spawnPoints.Clear();
         spawnPoints = new List<Transform>();
     }
+
+    private void OnEnable()
+    {
+        Health.onPlayerDeath += LoseGame;    
+    }
+
+    private void OnDisable()
+    {
+        Health.onPlayerDeath -= LoseGame;
+    }
+
     public void GameStart()
     {
         gameStarted = true;

@@ -175,8 +175,6 @@ public class GenerateMesh : MonoBehaviour
         GameObject player = Instantiate(playerPrefab, playerSpawn.transform.position, Quaternion.identity);
         playerController = player.GetComponent<PlayerController>();
         compassUI.GetComponentInChildren<Compass>().AssignPlayer(player.transform);
-        player.GetComponent<Health>().gameController = gc;
-        player.GetComponent<Health>().healthBar = healthBar;
     }
 
     public void SetUpScene()

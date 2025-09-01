@@ -71,7 +71,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 0
-  m_FillAmount: 1
+  m_FillAmount: 0.826
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
@@ -252,7 +252,7 @@ RectTransform:
   - {fileID: 4789555741808866886}
   - {fileID: 3040621669773600076}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -622,9 +622,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e5d195db4be3d84981c2c258841eefd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icon: {fileID: 0}
+  iconPrefab: {fileID: 0}
   compassImg: {fileID: 6139268641449446639}
   player: {fileID: 0}
+  maxDistance: 50
 --- !u!1 &1530888383487761632
 GameObject:
   m_ObjectHideFlags: 0
@@ -769,6 +770,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5843077350678477702}
   - component: {fileID: 5960916821434270541}
+  - component: {fileID: 1028408691746133255}
   m_Layer: 5
   m_Name: HealthBar
   m_TagString: Untagged
@@ -849,6 +851,18 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1028408691746133255
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1721267222117147677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c14bcd228abd5d42b7911bb0270045f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2403031102524457632
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,7 +12,7 @@ namespace Enemy
         private string note;
 
         [SerializeField]
-        private float damageAmount;
+        private int damageAmount;
 
         [SerializeField]
         private float damageCoolDown;
@@ -109,10 +109,10 @@ namespace Enemy
 
         private void OnTriggerStay(Collider other)
         {
-            if (other.transform.root.tag == "Player" && !dead && canDamagePlayer)
+            if (other.TryGetComponent(out IDamageable damageableObject) && !dead && canDamagePlayer)
             {
                 Debug.Log("Collision with player");
-                other.gameObject.GetComponent<Health>().TakeDamage(damageAmount);
+                damageableObject.TakeDamage(damageAmount);
                 damageDelay = damageCoolDown;
                 canDamagePlayer = false;
             }
