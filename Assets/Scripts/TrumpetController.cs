@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
-using Enemy;
+using DootEmUp.Gameplay.Enemy;
 
-namespace Player
+namespace DootEmUp.Gameplay.Player
 {
     public class TrumpetController : MonoBehaviour
     {

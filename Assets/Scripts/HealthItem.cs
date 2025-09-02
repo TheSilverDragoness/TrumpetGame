@@ -1,19 +1,19 @@
-using Player;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class HealthItem : MonoBehaviour
+namespace DootEmUp.Gameplay
 {
-    [SerializeField]
-    private int healAmount;
-
-    private void OnTriggerEnter(Collider other)
+    public class HealthItem : MonoBehaviour
     {
-        if (other.TryGetComponent(out IDamageable damageableObject))
+        [SerializeField]
+        private int healAmount;
+
+        private void OnTriggerEnter(Collider other)
         {
-            damageableObject.HealDamage(healAmount);
-            Destroy(gameObject);
+            if (other.TryGetComponent(out IDamageable damageableObject))
+            {
+                damageableObject.HealDamage(healAmount);
+                Destroy(gameObject);
+            }
         }
     }
 }

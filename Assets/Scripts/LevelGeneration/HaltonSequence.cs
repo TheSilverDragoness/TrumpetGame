@@ -4,32 +4,35 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Animations;
 
-public class HaltonSequence
+namespace DootEmUp.PCG
 {
-    public List<int> HaltonSeq(int seq_size, int b, int m_size)
+    public class HaltonSequence
     {
-        List<int> seq = new List<int>();
-        int startPoint = UnityEngine.Random.Range(0, int.MaxValue - seq_size);
-        
-        for (int i = startPoint; i < startPoint + seq_size; i ++)
+        public List<int> HaltonSeq(int seq_size, int b, int m_size)
         {
-            seq.Add(Mathf.RoundToInt((float)(2+(vdc(i, b) * (m_size-4)))));
-        }
-        Debug.Log("Halton Sequence Size: " + seq.Count);
-        return seq;
-    }
+            List<int> seq = new List<int>();
+            int startPoint = UnityEngine.Random.Range(0, int.MaxValue - seq_size);
 
-    double vdc(int n, int b)
-    {
-        double q = 0, bk = (double)1 / b;
-
-        while (n > 0)
-        {
-            q += (n % b) * bk;
-            n /= b;
-            bk /= b;
+            for (int i = startPoint; i < startPoint + seq_size; i++)
+            {
+                seq.Add(Mathf.RoundToInt((float)(2 + (vdc(i, b) * (m_size - 4)))));
+            }
+            Debug.Log("Halton Sequence Size: " + seq.Count);
+            return seq;
         }
 
-        return q;
+        double vdc(int n, int b)
+        {
+            double q = 0, bk = (double)1 / b;
+
+            while (n > 0)
+            {
+                q += (n % b) * bk;
+                n /= b;
+                bk /= b;
+            }
+
+            return q;
+        }
     }
 }

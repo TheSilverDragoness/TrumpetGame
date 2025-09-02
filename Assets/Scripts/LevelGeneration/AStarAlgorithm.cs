@@ -2,101 +2,104 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AStarAlgorithm
+namespace DootEmUp.PCG
 {
-    Grid grid;
-
-    public AStarAlgorithm(Grid g)
+    public class AStarAlgorithm
     {
-        grid = g;
-    }
+        Grid grid;
 
-    public void FindPath(Node snode, Node tnode)
-    {
-        GridNode startNode = grid.grid[snode.xcoord, snode.ycoord];
-        GridNode targetNode = grid.grid[tnode.xcoord, tnode.ycoord];
-
-        List<GridNode> openSet = new List<GridNode>();
-        HashSet<GridNode> closedSet = new HashSet<GridNode>();
-
-        openSet.Add(startNode);
-
-        while (openSet.Count > 0)
+        public AStarAlgorithm(Grid g)
         {
-            GridNode currentNode = openSet[0];
-            for (int i = 1; i < openSet.Count; i++) 
+            grid = g;
+        }
+
+        public void FindPath(Node snode, Node tnode)
+        {
+            GridNode startNode = grid.grid[snode.xcoord, snode.ycoord];
+            GridNode targetNode = grid.grid[tnode.xcoord, tnode.ycoord];
+
+            List<GridNode> openSet = new List<GridNode>();
+            HashSet<GridNode> closedSet = new HashSet<GridNode>();
+
+            openSet.Add(startNode);
+
+            while (openSet.Count > 0)
             {
-                if (openSet[i].fCost < currentNode.fCost || openSet[i].fCost == currentNode.fCost && openSet[i].hCost < currentNode.hCost)
+                GridNode currentNode = openSet[0];
+                for (int i = 1; i < openSet.Count; i++)
                 {
-                    currentNode = openSet[i];
-                }
-            }
-            openSet.Remove(currentNode);
-            closedSet.Add(currentNode);
-
-            if (currentNode == targetNode)
-            {
-                GetPath(startNode, targetNode);
-                Debug.Log("Finished Generating path");
-            }
-
-            foreach (GridNode neighbour in grid.neighbourNodes(currentNode))
-            {
-                //Debug.Log("(" + currentNode.xCoord + "," +  currentNode.yCoord + ") + has neighbour at (" + neighbour.xCoord + "," + neighbour.yCoord + ")");
-                if (closedSet.Contains(neighbour) || neighbour.type > 1)
-                {
-                    continue;
-                }
-
-                int newMovementCostToNeighbour = currentNode.gCost + GetDistance(currentNode, neighbour);
-                if (newMovementCostToNeighbour < neighbour.gCost || !openSet.Contains(neighbour))
-                {
-                    neighbour.gCost = newMovementCostToNeighbour;
-                    neighbour.hCost = GetDistance(neighbour, targetNode);
-                    neighbour.parent = currentNode;
-
-                    if (!openSet.Contains(neighbour))
+                    if (openSet[i].fCost < currentNode.fCost || openSet[i].fCost == currentNode.fCost && openSet[i].hCost < currentNode.hCost)
                     {
-                        openSet.Add(neighbour);
+                        currentNode = openSet[i];
+                    }
+                }
+                openSet.Remove(currentNode);
+                closedSet.Add(currentNode);
+
+                if (currentNode == targetNode)
+                {
+                    GetPath(startNode, targetNode);
+                    Debug.Log("Finished Generating path");
+                }
+
+                foreach (GridNode neighbour in grid.neighbourNodes(currentNode))
+                {
+                    //Debug.Log("(" + currentNode.xCoord + "," +  currentNode.yCoord + ") + has neighbour at (" + neighbour.xCoord + "," + neighbour.yCoord + ")");
+                    if (closedSet.Contains(neighbour) || neighbour.type > 1)
+                    {
+                        continue;
+                    }
+
+                    int newMovementCostToNeighbour = currentNode.gCost + GetDistance(currentNode, neighbour);
+                    if (newMovementCostToNeighbour < neighbour.gCost || !openSet.Contains(neighbour))
+                    {
+                        neighbour.gCost = newMovementCostToNeighbour;
+                        neighbour.hCost = GetDistance(neighbour, targetNode);
+                        neighbour.parent = currentNode;
+
+                        if (!openSet.Contains(neighbour))
+                        {
+                            openSet.Add(neighbour);
+                        }
                     }
                 }
             }
         }
-    }
 
-    void GetPath(GridNode startNode, GridNode endNode)
-    {
-        List<GridNode> path = new List<GridNode>();
-        GridNode currentNode = endNode;
-
-        while (currentNode != startNode)
+        void GetPath(GridNode startNode, GridNode endNode)
         {
-            path.Add(currentNode);
-            currentNode = currentNode.parent;
-        }
-        path.Add(startNode);
+            List<GridNode> path = new List<GridNode>();
+            GridNode currentNode = endNode;
 
-        foreach (GridNode n in path)
-        {
-            if (n.type == 0)
+            while (currentNode != startNode)
             {
-                n.type = 1;
+                path.Add(currentNode);
+                currentNode = currentNode.parent;
             }
+            path.Add(startNode);
+
+            foreach (GridNode n in path)
+            {
+                if (n.type == 0)
+                {
+                    n.type = 1;
+                }
+            }
+
+            Debug.Log("Generated Path between nodes at " + startNode.xCoord + ", " + startNode.yCoord + " and " + endNode.xCoord + ", " + endNode.yCoord);
         }
 
-        Debug.Log("Generated Path between nodes at " + startNode.xCoord + ", " + startNode.yCoord + " and " + endNode.xCoord + ", " + endNode.yCoord);
-    }
+        int GetDistance(GridNode nodeA, GridNode nodeB)
+        {
+            int xDist = Mathf.Abs(nodeA.xCoord - nodeB.xCoord);
+            int yDist = Mathf.Abs(nodeA.yCoord - nodeB.yCoord);
 
-    int GetDistance(GridNode nodeA, GridNode nodeB)
-    {
-        int xDist = Mathf.Abs(nodeA.xCoord - nodeB.xCoord);
-        int yDist = Mathf.Abs(nodeA.yCoord - nodeB.yCoord);
+            return xDist + yDist;
+        }
 
-        return  xDist + yDist;
-    }
-
-    public Grid GetGrid()
-    {
-        return grid;
+        public Grid GetGrid()
+        {
+            return grid;
+        }
     }
 }

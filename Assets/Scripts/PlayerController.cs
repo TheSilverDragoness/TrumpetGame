@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Player
+namespace DootEmUp.Gameplay.Player
 {
     [RequireComponent(typeof(Rigidbody))]
     public class PlayerController : MonoBehaviour

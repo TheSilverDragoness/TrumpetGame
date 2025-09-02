@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Player
+namespace DootEmUp.Gameplay.Player
 {
     public class Health : MonoBehaviour, IDamageable
     {

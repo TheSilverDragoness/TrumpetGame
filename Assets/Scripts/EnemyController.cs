@@ -1,10 +1,8 @@
-using Player;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using DootEmUp.UI;
 
-namespace Enemy
+namespace DootEmUp.Gameplay.Enemy
 {
     public class EnemyController : MonoBehaviour
     {
@@ -30,7 +28,7 @@ namespace Enemy
         private float damageDelay;
         private marker marker;
         [SerializeField]
-        private Compass compass;
+        private UI.Compass compass;
         private CapsuleCollider capsuleCollider;
 
         private void Start()
@@ -47,7 +45,7 @@ namespace Enemy
             controller = GameObject.FindWithTag("GameController").GetComponent<GameController>();
         }
 
-        public void SetUpEnemy(Compass _compass)
+        public void SetUpEnemy(UI.Compass _compass)
         {
             compass = _compass;
             marker = GetComponent<marker>();

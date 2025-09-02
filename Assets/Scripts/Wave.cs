@@ -2,8 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Wave : MonoBehaviour
+namespace DootEmUp.Gameplay
 {
-    public GameObject[] enemies;
-    public float spawnTimer;
+    public class Wave : MonoBehaviour
+    {
+        public GameObject[] enemies;
+        public float spawnTimer;
+    }
+
 }
