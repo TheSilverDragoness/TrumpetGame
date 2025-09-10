@@ -10,8 +10,6 @@ namespace DootEmUp.Gameplay.Player
         public delegate void OnPlayerHealthChanged(int health, int maxHealth);
         public static event OnPlayerHealthChanged onPlayerHealthChanged;
 
-        private GameManager gameManager;
-
         [SerializeField]
         private int maxHealth;
 
@@ -29,7 +27,7 @@ namespace DootEmUp.Gameplay.Player
             curHealth = Mathf.Clamp(curHealth, 0, maxHealth);
             onPlayerHealthChanged?.Invoke(curHealth, maxHealth);
 
-            gameManager.UpdateGameState(GameState.Lose);
+            GameManager.instance.UpdateGameState(GameState.Lose);
         }
 
         public void HealDamage(int damage)

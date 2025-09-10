@@ -17,6 +17,10 @@ namespace DootEmUp.Gameplay
         public GameState state { get; private set; }
 
         public static event Action<GameState> OnGameStateChange;
+        public static event Action OnWin;
+        public static event Action OnLose;
+        public static event Action OnPause;
+        public static event Action OnResume;
 
         [SerializeField]
         public List<Transform> spawnPoints;
@@ -26,21 +30,11 @@ namespace DootEmUp.Gameplay
         private float waveDelay;
 
         [SerializeField]
-        private GameObject loseScreen;
-        [SerializeField]
-        private GameObject winScreen;
-        [SerializeField]
-        private GameObject pauseScreen;
-        [SerializeField]
-        private GameObject attributionsScreen;
-        [SerializeField]
-        private GameObject helpScreen;
-
-        [SerializeField]
         private GameObject healthItem;
         [HideInInspector]
         public Transform healthItemSpawn;
 
+        //Wave Manager
         [SerializeField]
         private TMP_Text waveNumber;
         [SerializeField]
@@ -48,19 +42,7 @@ namespace DootEmUp.Gameplay
         [SerializeField]
         private TMP_Text waveCountdown;
         [SerializeField]
-        private GameObject healthBar;
-        [SerializeField]
-        private GameObject compassUI;
-
-        [SerializeField]
-        private GameObject gameUI;
-
-        [SerializeField]
         private int maxEnemies;
-
-        private GameObject curHealthItem;
-        private GameObject[] spawnList;
-
         private List<GameObject> enemiesList = new List<GameObject>();
         private float spawnDelay;
         private float curTimeLeft;
@@ -69,7 +51,10 @@ namespace DootEmUp.Gameplay
         private int enemyNum = 1;
         private bool firstWave = true;
         private bool waveInProgress;
-        public bool gameStarted;
+        public bool gameStarted; //Handled by GameState
+
+        private GameObject curHealthItem;
+        private GameObject[] spawnList;
 
         private void Awake()
         {
@@ -82,34 +67,16 @@ namespace DootEmUp.Gameplay
                 instance = this;
             }
 
-            gameStarted = false;
-            gameUI.SetActive(false);
+            gameStarted = false; //Handled by GameState
             spawnPoints.Clear();
             spawnPoints = new List<Transform>();
         }
 
-        private void OnEnable()
-        {
-            Health.onPlayerDeath += LoseGame;
-        }
-
-        private void OnDisable()
-        {
-            Health.onPlayerDeath -= LoseGame;
-        }
-
         public void GameStart()
         {
-            gameStarted = true;
-            gameUI.SetActive(true);
+            gameStarted = true; //Handled by GameState
             Time.timeScale = 1;
-            loseScreen.SetActive(false);
-            winScreen.SetActive(false);
-            pauseScreen.SetActive(false);
-            attributionsScreen.SetActive(false);
-            helpScreen.SetActive(false);
             enemyCounter.gameObject.SetActive(false);
-            healthBar.SetActive(true);
             spawnList = waveList[waveNum].gameObject.GetComponent<Wave>().enemies;
             StartCoroutine(NewWave());
             UpdateWaveNumber();
@@ -118,7 +85,7 @@ namespace DootEmUp.Gameplay
 
         private void Update()
         {
-            if (!gameStarted)
+            if (!gameStarted) //Handled by GameState
             {
                 return;
             }
@@ -133,6 +100,7 @@ namespace DootEmUp.Gameplay
             }
         }
 
+        //Move to Wave Manager
         private void NewEnemy()
         {
             waveInProgress = true;
@@ -152,12 +120,13 @@ namespace DootEmUp.Gameplay
             }
         }
 
+        //Move to Wave Manager
         IEnumerator SpawnEnemy(Transform spawnPoint, GameObject enemy)
         {
             Debug.LogWarning("SpawnEnemy called");
             yield return new WaitForSeconds(spawnDelay);
             GameObject newEnemy = Instantiate(enemy, spawnPoint.position, Quaternion.identity);
-            newEnemy.GetComponent<EnemyController>().SetUpEnemy(compassUI.GetComponentInChildren<UI.Compass>());
+            //newEnemy.GetComponent<EnemyController>().SetUpEnemy(compassUI.GetComponentInChildren<UI.Compass>());
             Debug.Log(newEnemy + " spawned");
             enemiesList.Add(newEnemy);
             enemyNum++;
@@ -165,6 +134,7 @@ namespace DootEmUp.Gameplay
             yield break;
         }
 
+        //Move to Wave Manager
         private void PrepareNewWave()
         {
             Debug.Log("PrepareNewWave called");
@@ -191,6 +161,7 @@ namespace DootEmUp.Gameplay
             }
         }
 
+        //Move to Wave Manager
         IEnumerator NewWave()
         {
             Debug.Log("NewWave called");
@@ -214,6 +185,7 @@ namespace DootEmUp.Gameplay
             yield break;
         }
 
+        //Move to Wave Manager
         IEnumerator WaitUntilWaveDone()
         {
             while (waveInProgress)
@@ -237,44 +209,33 @@ namespace DootEmUp.Gameplay
                 yield return null;
             }
         }
+        private void Win()
+        {
+            OnWin?.Invoke();
+            StartCoroutine(WinGame());
+        }
 
         IEnumerator WinGame()
         {
             yield return new WaitForSeconds(2);
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.Confined;
-            healthBar.SetActive(false);
-            winScreen.SetActive(true);
             Time.timeScale = 0;
             yield break;
         }
 
         private void LoseGame()
         {
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.Confined;
-            healthBar.SetActive(false);
-            loseScreen.SetActive(true);
             Time.timeScale = 0;
         }
 
         private void Pause()
         {
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.Confined;
-            healthBar.SetActive(false);
-            pauseScreen.SetActive(true);
-            compassUI.SetActive(false);
+            OnPause!.Invoke();
             Time.timeScale = 0;
         }
 
         private void Resume()
         {
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
-            pauseScreen.SetActive(false);
-            healthBar.SetActive(true);
-            compassUI.SetActive(true);
+            OnResume?.Invoke();
             Time.timeScale = 1;
         }
 
@@ -282,30 +243,6 @@ namespace DootEmUp.Gameplay
         {
             Scene scene = SceneManager.GetActiveScene();
             SceneManager.LoadScene(scene.name);
-        }
-
-        public void OpenAttributions()
-        {
-            pauseScreen.SetActive(false);
-            attributionsScreen.SetActive(true);
-        }
-
-        public void CloseAttributions()
-        {
-            attributionsScreen.SetActive(false);
-            pauseScreen.SetActive(true);
-        }
-
-        public void OpenHelp()
-        {
-            pauseScreen.SetActive(false);
-            helpScreen.SetActive(true);
-        }
-
-        public void CloseHelp()
-        {
-            helpScreen.SetActive(false);
-            pauseScreen.SetActive(true);
         }
 
         private void UpdateTimer(float timeLeft)
@@ -359,9 +296,10 @@ namespace DootEmUp.Gameplay
                     Pause();
                     break;
                 case GameState.Win:
-                    StartCoroutine(WinGame());
+                    Win();
                     break;
                 case GameState.Lose:
+                    OnLose?.Invoke();
                     LoseGame();
                     break;
                 case GameState.Quit:

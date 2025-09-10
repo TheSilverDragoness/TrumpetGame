@@ -23,7 +23,6 @@ namespace DootEmUp.Gameplay.Enemy
         private NavMeshAgent agent;
         [HideInInspector]
         public bool dead = false;
-        private GameController controller;
         private bool canDamagePlayer = true;
         private float damageDelay;
         private marker marker;
@@ -42,7 +41,6 @@ namespace DootEmUp.Gameplay.Enemy
             }
             animator = GetComponent<Animator>();
             agent = GetComponent<NavMeshAgent>();
-            controller = GameObject.FindWithTag("GameController").GetComponent<GameController>();
         }
 
         public void SetUpEnemy(UI.Compass _compass)
@@ -99,7 +97,7 @@ namespace DootEmUp.Gameplay.Enemy
                 bone.isKinematic = false;
             }
             animator.enabled = false;
-            controller.UpdateEnemyCounter();
+            GameManager.instance.UpdateEnemyCounter();
             compass.RemoveMarker(marker);
             capsuleCollider.enabled = false;
             
