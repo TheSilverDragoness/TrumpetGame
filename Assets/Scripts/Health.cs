@@ -7,11 +7,10 @@ namespace DootEmUp.Gameplay.Player
 {
     public class Health : MonoBehaviour, IDamageable
     {
-        public delegate void OnPlayerDeath();
-        public static event OnPlayerDeath onPlayerDeath;
-
         public delegate void OnPlayerHealthChanged(int health, int maxHealth);
         public static event OnPlayerHealthChanged onPlayerHealthChanged;
+
+        private GameManager gameManager;
 
         [SerializeField]
         private int maxHealth;
@@ -29,10 +28,8 @@ namespace DootEmUp.Gameplay.Player
             curHealth -= damage;
             curHealth = Mathf.Clamp(curHealth, 0, maxHealth);
             onPlayerHealthChanged?.Invoke(curHealth, maxHealth);
-            if (curHealth <= 0)
-            {
-                onPlayerDeath?.Invoke();
-            }
+
+            gameManager.UpdateGameState(GameState.Lose);
         }
 
         public void HealDamage(int damage)
@@ -40,10 +37,6 @@ namespace DootEmUp.Gameplay.Player
             curHealth += damage;
             curHealth = Mathf.Clamp(curHealth, 0, maxHealth);
             onPlayerHealthChanged?.Invoke(curHealth, maxHealth);
-            if (curHealth <= 0)
-            {
-                onPlayerDeath?.Invoke();
-            }
         }
     }
 }

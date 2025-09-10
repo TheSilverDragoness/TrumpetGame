@@ -10,6 +10,8 @@ namespace DootEmUp.Gameplay.Player
     public class TrumpetController : MonoBehaviour
     {
         [SerializeField]
+        private int damage = 10;
+        [SerializeField]
         private GameObject valve1;
         [SerializeField]
         private GameObject valve2;
@@ -60,7 +62,7 @@ namespace DootEmUp.Gameplay.Player
         private void Update()
         {
             HandleInput();
-            HandleBreath();
+            //HandleBreath();
         }
 
         private void HandleInput()
@@ -98,6 +100,8 @@ namespace DootEmUp.Gameplay.Player
             if (Physics.Raycast(ray, out hit, Mathf.Infinity, dootLayerMask))
             {
                 hit.transform.root.GetComponent<EnemyController>().Die(noteStr.ToString());
+                hit.transform.root.TryGetComponent(out IDamageable damageableObject);
+                damageableObject.TakeDamage(damage);
             }
         }
 
@@ -108,19 +112,20 @@ namespace DootEmUp.Gameplay.Player
             Instantiate(noteSprites[noteNum], popupTransforms[i].position, Quaternion.identity, transform);
         }
 
-        private void HandleBreath()
-        {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                curBreath -= breathEmptyRate * Time.deltaTime;
-                curBreath = Mathf.Clamp(curBreath, 0, breath);
-            }
-            else if (!Input.GetKeyDown(KeyCode.Space))
-            {
-                curBreath += breathRefillRate * Time.deltaTime;
-                curBreath = Mathf.Clamp(curBreath, 0, breath);
-            }
-        }
+        //Doesnt Currently Do Anything
+        //private void HandleBreath()
+        //{
+        //    if (Input.GetKeyDown(KeyCode.Space))
+        //    {
+        //        curBreath -= breathEmptyRate * Time.deltaTime;
+        //        curBreath = Mathf.Clamp(curBreath, 0, breath);
+        //    }
+        //    else if (!Input.GetKeyDown(KeyCode.Space))
+        //    {
+        //        curBreath += breathRefillRate * Time.deltaTime;
+        //        curBreath = Mathf.Clamp(curBreath, 0, breath);
+        //    }
+        //}
 
         private void ValveDown(Valve curValve)
         {

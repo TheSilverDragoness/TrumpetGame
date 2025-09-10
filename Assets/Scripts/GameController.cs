@@ -5,11 +5,19 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using DootEmUp.Gameplay.Player;
 using DootEmUp.Gameplay.Enemy;
+using System;
+using Random = UnityEngine.Random;
 
 namespace DootEmUp.Gameplay
 {
-    public class GameController : MonoBehaviour
+    public class GameManager : MonoBehaviour
     {
+        public static GameManager instance;
+
+        public GameState state { get; private set; }
+
+        public static event Action<GameState> OnGameStateChange;
+
         [SerializeField]
         public List<Transform> spawnPoints;
         [SerializeField]
@@ -61,13 +69,19 @@ namespace DootEmUp.Gameplay
         private int enemyNum = 1;
         private bool firstWave = true;
         private bool waveInProgress;
-        private bool isPaused;
-
         public bool gameStarted;
 
         private void Awake()
         {
-            isPaused = false;
+            if (instance != null && instance != this)
+            {
+                Destroy(instance);
+            }
+            else
+            {
+                instance = this;
+            }
+
             gameStarted = false;
             gameUI.SetActive(false);
             spawnPoints.Clear();
@@ -108,9 +122,9 @@ namespace DootEmUp.Gameplay
             {
                 return;
             }
-            if (Input.GetKeyDown(KeyCode.Escape) && !isPaused)
+            if (Input.GetKeyDown(KeyCode.Escape) && state != GameState.Pause)
             {
-                Pause();
+                UpdateGameState(GameState.Pause);
             }
             if (!waveInProgress)
             {
@@ -235,7 +249,7 @@ namespace DootEmUp.Gameplay
             yield break;
         }
 
-        public void LoseGame()
+        private void LoseGame()
         {
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.Confined;
@@ -244,9 +258,8 @@ namespace DootEmUp.Gameplay
             Time.timeScale = 0;
         }
 
-        public void Pause()
+        private void Pause()
         {
-            isPaused = true;
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.Confined;
             healthBar.SetActive(false);
@@ -255,26 +268,20 @@ namespace DootEmUp.Gameplay
             Time.timeScale = 0;
         }
 
-        public void Resume()
+        private void Resume()
         {
             Cursor.visible = false;
             Cursor.lockState = CursorLockMode.Locked;
             pauseScreen.SetActive(false);
             healthBar.SetActive(true);
             compassUI.SetActive(true);
-            isPaused = false;
             Time.timeScale = 1;
         }
 
-        public void Restart()
+        private void Restart()
         {
             Scene scene = SceneManager.GetActiveScene();
             SceneManager.LoadScene(scene.name);
-        }
-
-        public void ExitGame()
-        {
-            Application.Quit();
         }
 
         public void OpenAttributions()
@@ -331,5 +338,51 @@ namespace DootEmUp.Gameplay
         {
             FindObjectOfType<PlayerCamera>().SetMouseSensitivity(sensitivity);
         }
+
+        public void ExitGame()
+        {
+            Application.Quit();
+        }
+
+        public void UpdateGameState(GameState newState)
+        {
+            state = newState;
+
+            switch (newState)
+            {
+                case GameState.GenerateLevel:
+                    break;
+                case GameState.Play:
+                    Resume();
+                    break;
+                case GameState.Pause:
+                    Pause();
+                    break;
+                case GameState.Win:
+                    StartCoroutine(WinGame());
+                    break;
+                case GameState.Lose:
+                    LoseGame();
+                    break;
+                case GameState.Quit:
+                    ExitGame();
+                    break;
+                default:
+                    Debug.Log("Update Game State Error: Game State Not Recognised");
+                    break;
+            }
+
+            OnGameStateChange?.Invoke(newState);
+        }
+    }
+
+    public enum GameState
+    {
+        GenerateLevel,
+        Play,
+        Pause,
+        Win,
+        Lose,
+        Quit
     }
 }
