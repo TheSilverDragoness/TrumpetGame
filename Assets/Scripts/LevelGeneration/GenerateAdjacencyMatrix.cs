@@ -32,8 +32,6 @@ namespace DootEmUp.PCG
         [SerializeField]
         private int gridSize = 18;
         [SerializeField]
-        private GameController gameController;
-        [SerializeField]
         private GameObject pcgUI;
 
         private Vector3 spawnCoords;
@@ -265,12 +263,12 @@ namespace DootEmUp.PCG
             //layoutGenerator.RenderGrid();
             Grid grid = layoutGenerator.grid;
             meshGenerator.GenerateWalls(grid);
-            meshGenerator.CreatePlayerSpawn((int)spawnCoords.x, (int)spawnCoords.y, gameController);
+            meshGenerator.CreatePlayerSpawn((int)spawnCoords.x, (int)spawnCoords.y);
             meshGenerator.CreateSpawnRoomObstacle((int)spawnCoords.x, (int)spawnCoords.y);
             meshGenerator.CreateNavMesh(gridSize);
-            meshGenerator.SpawnPlayer(gameController);
+            meshGenerator.SpawnPlayer();
             pcgUI.SetActive(false);
-            gameController.GameStart();
+            GameManager.instance.GameStart();
         }
 
         private void ApplyRule(List<Node> nl)

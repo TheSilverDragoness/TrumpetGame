@@ -125,6 +125,11 @@ namespace DootEmUp.Gameplay.Player
             rb.AddForce(transform.up * jumpForce, ForceMode.Force);
         }
 
+        public void DeathHandler()
+        {
+            GameManager.instance.UpdateGameState(GameState.Lose);
+        }
+
         private void OnCollisionEnter(Collision collision)
         {
             if (collision.transform.tag == "Ground")

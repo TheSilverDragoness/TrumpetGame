@@ -23,38 +23,14 @@ namespace DootEmUp.Gameplay
         public static event Action OnResume;
 
         [SerializeField]
-        public List<Transform> spawnPoints;
-        [SerializeField]
-        private GameObject[] waveList;
-        [SerializeField]
-        private float waveDelay;
-
-        [SerializeField]
         private GameObject healthItem;
         [HideInInspector]
         public Transform healthItemSpawn;
 
-        //Wave Manager
-        [SerializeField]
-        private TMP_Text waveNumber;
-        [SerializeField]
-        private TMP_Text enemyCounter;
-        [SerializeField]
-        private TMP_Text waveCountdown;
-        [SerializeField]
-        private int maxEnemies;
-        private List<GameObject> enemiesList = new List<GameObject>();
-        private float spawnDelay;
-        private float curTimeLeft;
-        private int curEnemyDooted;
-        private int waveNum = 0;
-        private int enemyNum = 1;
-        private bool firstWave = true;
-        private bool waveInProgress;
-        public bool gameStarted; //Handled by GameState
+        public bool gameStarted;
 
-        private GameObject curHealthItem;
-        private GameObject[] spawnList;
+        [HideInInspector]
+        public GameObject curHealthItem {  get; private set; }
 
         private void Awake()
         {
@@ -68,19 +44,12 @@ namespace DootEmUp.Gameplay
             }
 
             gameStarted = false; //Handled by GameState
-            spawnPoints.Clear();
-            spawnPoints = new List<Transform>();
         }
 
         public void GameStart()
         {
             gameStarted = true; //Handled by GameState
             Time.timeScale = 1;
-            enemyCounter.gameObject.SetActive(false);
-            spawnList = waveList[waveNum].gameObject.GetComponent<Wave>().enemies;
-            StartCoroutine(NewWave());
-            UpdateWaveNumber();
-            curTimeLeft = waveDelay;
         }
 
         private void Update()
@@ -93,122 +62,8 @@ namespace DootEmUp.Gameplay
             {
                 UpdateGameState(GameState.Pause);
             }
-            if (!waveInProgress)
-            {
-                curTimeLeft -= Time.deltaTime;
-                UpdateTimer(curTimeLeft);
-            }
         }
-
-        //Move to Wave Manager
-        private void NewEnemy()
-        {
-            waveInProgress = true;
-            curTimeLeft = waveDelay;
-            waveCountdown.gameObject.SetActive(false);
-            enemyCounter.gameObject.SetActive(true);
-            Debug.Log("NewEnemy called");
-            int k = Random.Range(0, spawnPoints.Count);
-
-            if (enemyNum < spawnList.Length)
-            {
-                StartCoroutine(SpawnEnemy(spawnPoints[k], spawnList[enemyNum]));
-            }
-            else if (enemyNum == spawnList.Length)
-            {
-                StartCoroutine(WaitUntilWaveDone());
-            }
-        }
-
-        //Move to Wave Manager
-        IEnumerator SpawnEnemy(Transform spawnPoint, GameObject enemy)
-        {
-            Debug.LogWarning("SpawnEnemy called");
-            yield return new WaitForSeconds(spawnDelay);
-            GameObject newEnemy = Instantiate(enemy, spawnPoint.position, Quaternion.identity);
-            //newEnemy.GetComponent<EnemyController>().SetUpEnemy(compassUI.GetComponentInChildren<UI.Compass>());
-            Debug.Log(newEnemy + " spawned");
-            enemiesList.Add(newEnemy);
-            enemyNum++;
-            NewEnemy();
-            yield break;
-        }
-
-        //Move to Wave Manager
-        private void PrepareNewWave()
-        {
-            Debug.Log("PrepareNewWave called");
-            waveInProgress = false;
-            waveCountdown.gameObject.SetActive(true);
-            enemyCounter.gameObject.SetActive(false);
-            waveNum++;
-            UpdateWaveNumber();
-
-            if (waveNum == waveList.Length)
-            {
-                StartCoroutine(WinGame());
-            }
-            else
-            {
-                enemyNum = 0;
-                spawnList = waveList[waveNum].GetComponent<Wave>().enemies;
-                Debug.Log("spawn delay " + spawnDelay);
-                if (curHealthItem == null)
-                {
-                    curHealthItem = Instantiate(healthItem, healthItemSpawn.position, Quaternion.identity, healthItemSpawn);
-                }
-                StartCoroutine(NewWave());
-            }
-        }
-
-        //Move to Wave Manager
-        IEnumerator NewWave()
-        {
-            Debug.Log("NewWave called");
-            spawnDelay = waveList[waveNum].GetComponent<Wave>().spawnTimer;
-            WaitForSeconds waitForSeconds = new WaitForSeconds(waveDelay / 2);
-            yield return waitForSeconds;
-
-            if (!firstWave)
-            {
-                foreach (GameObject enemy in enemiesList)
-                {
-                    Destroy(enemy);
-                }
-                enemiesList.Clear();
-            }
-
-            yield return waitForSeconds;
-            curEnemyDooted = -1;
-            UpdateEnemyCounter();
-            NewEnemy();
-            yield break;
-        }
-
-        //Move to Wave Manager
-        IEnumerator WaitUntilWaveDone()
-        {
-            while (waveInProgress)
-            {
-                bool allEnemiesDead = true;
-                foreach (GameObject enemy in enemiesList)
-                {
-                    if (!enemy.GetComponent<EnemyController>().dead)
-                    {
-                        allEnemiesDead = false;
-                        break;
-                    }
-                }
-
-                if (allEnemiesDead)
-                {
-                    PrepareNewWave();
-                    firstWave = false;
-                    break;
-                }
-                yield return null;
-            }
-        }
+        
         private void Win()
         {
             OnWin?.Invoke();
@@ -245,30 +100,9 @@ namespace DootEmUp.Gameplay
             SceneManager.LoadScene(scene.name);
         }
 
-        private void UpdateTimer(float timeLeft)
+        public void SpawnNewHealthItem()
         {
-            timeLeft = Mathf.Round(timeLeft);
-            waveCountdown.text = "Time until next wave: " + timeLeft.ToString();
-        }
-
-        private void UpdateWaveNumber()
-        {
-            int adjustedWavenum = waveNum + 1;
-            waveNumber.text = "Wave " + adjustedWavenum;
-        }
-
-        public void UpdateEnemyCounter()
-        {
-            if (firstWave)
-            {
-                curEnemyDooted++;
-                enemyCounter.text = "Enemies Dooted: " + curEnemyDooted.ToString() + "/" + (spawnList.Length - 1).ToString();
-            }
-            else
-            {
-                curEnemyDooted++;
-                enemyCounter.text = "Enemies Dooted: " + curEnemyDooted.ToString() + "/" + spawnList.Length.ToString();
-            }
+            curHealthItem = Instantiate(healthItem, healthItemSpawn.position, Quaternion.identity, healthItemSpawn);
         }
 
         public void SetPlayerCameraSensitivity(float sensitivity)

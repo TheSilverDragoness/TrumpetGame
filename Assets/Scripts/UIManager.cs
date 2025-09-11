@@ -1,12 +1,15 @@
 using DootEmUp.Gameplay;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 namespace DootEmUp.UI
 {
     public class UIManager : MonoBehaviour
     {
+        public static UIManager instance;
+
         [SerializeField]
         private GameObject loseScreen;
         [SerializeField]
@@ -17,6 +20,13 @@ namespace DootEmUp.UI
         private GameObject attributionsScreen;
         [SerializeField]
         private GameObject helpScreen;
+
+        [SerializeField]
+        private TMP_Text waveNumberText;
+        [SerializeField]
+        private TMP_Text enemyCounter;
+        [SerializeField]
+        private TMP_Text waveCountdown;
 
         //HUD Manager?
         [SerializeField]
@@ -41,6 +51,15 @@ namespace DootEmUp.UI
 
         private void Awake()
         {
+            if (instance != null && instance != this) 
+            {
+                Destroy(instance);
+            }
+            else
+            {
+                instance = this;
+            }
+
             gameUI.SetActive(false);
         }
 
@@ -53,7 +72,35 @@ namespace DootEmUp.UI
             helpScreen.SetActive(false);
             gameUI.SetActive(true);
             healthBar.SetActive(true);
+            enemyCounter.gameObject.SetActive(false);
+        }
 
+        public void UpdateTimer(float timeLeft)
+        {
+            timeLeft = Mathf.Round(timeLeft);
+            waveCountdown.text = "Time until next wave: " + timeLeft.ToString();
+        }
+
+        public void UpdateWaveNumber(int waveNumber)
+        {
+            waveNumberText.text = "Wave " + waveNumber;
+        }
+
+        public void UpdateEnemyCounter(int enemiesDooted, int totalEnemies)
+        {
+            enemyCounter.text = "Enemies Dooted: " + enemiesDooted.ToString() + "/" + totalEnemies.ToString();
+        }
+
+        public void StartOfRountUIUpdate()
+        {
+            waveCountdown.gameObject.SetActive(false);
+            enemyCounter.gameObject.SetActive(true);
+        }
+
+        public void EndOfRoundUIUpdate()
+        {
+            waveCountdown.gameObject.SetActive(true);
+            enemyCounter.gameObject.SetActive(false);
         }
 
         private void HandleWin()

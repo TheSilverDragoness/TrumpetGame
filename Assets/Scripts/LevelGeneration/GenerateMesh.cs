@@ -148,13 +148,13 @@ namespace DootEmUp.PCG
             enemySpawnPoints.Add(spawnedSpawnPoint.transform.Find("SpawnPoint"));
         }
 
-        public void CreatePlayerSpawn(int x, int z, GameController gc)
+        public void CreatePlayerSpawn(int x, int z)
         {
             Vector3 playerSpawnPosition = new Vector3(x * cellSize, 1.5f, z * cellSize);
             playerSpawn = Instantiate(new GameObject(), playerSpawnPosition, Quaternion.identity);
             playerSpawn.name = "PlayerSpawn";
-            gc.healthItemSpawn = playerSpawn.transform;
-            gc.spawnPoints = enemySpawnPoints;
+            GameManager.instance.healthItemSpawn = playerSpawn.transform;
+            WaveManager.instance.spawnPoints = enemySpawnPoints;
         }
 
         public void CreateSpawnRoomObstacle(int x, int z)
@@ -170,7 +170,7 @@ namespace DootEmUp.PCG
             navSurface.BuildNavMesh();
         }
 
-        public void SpawnPlayer(GameController gc)
+        public void SpawnPlayer()
         {
             GameObject player = Instantiate(playerPrefab, playerSpawn.transform.position, Quaternion.identity);
             playerController = player.GetComponent<PlayerController>();

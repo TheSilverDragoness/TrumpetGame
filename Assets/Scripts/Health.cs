@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace DootEmUp.Gameplay.Player
@@ -11,12 +12,20 @@ namespace DootEmUp.Gameplay.Player
         public static event OnPlayerHealthChanged onPlayerHealthChanged;
 
         [SerializeField]
+        private UnityEvent onDeath;
+
+        [SerializeField]
         private int maxHealth;
 
         private int curHealth;
 
         private void Start()
         {
+            if (onDeath == null)
+            {
+                onDeath = new UnityEvent();
+            }
+
             curHealth = maxHealth;
             onPlayerHealthChanged?.Invoke(curHealth, maxHealth);
         }
@@ -27,7 +36,10 @@ namespace DootEmUp.Gameplay.Player
             curHealth = Mathf.Clamp(curHealth, 0, maxHealth);
             onPlayerHealthChanged?.Invoke(curHealth, maxHealth);
 
-            GameManager.instance.UpdateGameState(GameState.Lose);
+            if (curHealth <= 0)
+            {
+                onDeath.Invoke();
+            }
         }
 
         public void HealDamage(int damage)

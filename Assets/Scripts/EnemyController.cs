@@ -97,7 +97,7 @@ namespace DootEmUp.Gameplay.Enemy
                 bone.isKinematic = false;
             }
             animator.enabled = false;
-            GameManager.instance.UpdateEnemyCounter();
+            WaveManager.instance.UpdateEnemyCounter();
             compass.RemoveMarker(marker);
             capsuleCollider.enabled = false;
             
