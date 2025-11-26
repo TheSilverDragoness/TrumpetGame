@@ -121,7 +121,11 @@ namespace DootEmUp.Gameplay
 
             switch (newState)
             {
+                case GameState.MainMenu:
+                    SceneManager.LoadScene("MainMenu");
+                    break;
                 case GameState.GenerateLevel:
+                    SceneManager.LoadScene("PCGScene");
                     break;
                 case GameState.Play:
                     Resume();
@@ -150,6 +154,7 @@ namespace DootEmUp.Gameplay
 
     public enum GameState
     {
+        MainMenu,
         GenerateLevel,
         Play,
         Pause,
