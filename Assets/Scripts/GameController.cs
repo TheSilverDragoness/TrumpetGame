@@ -7,6 +7,7 @@ using DootEmUp.Gameplay.Player;
 using DootEmUp.Gameplay.Enemy;
 using System;
 using Random = UnityEngine.Random;
+using Unity.VisualScripting;
 
 namespace DootEmUp.Gameplay
 {
@@ -16,7 +17,8 @@ namespace DootEmUp.Gameplay
 
         public GameState state { get; private set; }
 
-        public static event Action<GameState> OnGameStateChange;
+        public static event Action<GameState> OnGameStateEnter;
+        public static event Action<GameState> OnGameStateExit;
         public static event Action OnWin;
         public static event Action OnLose;
         public static event Action OnPause;
@@ -26,8 +28,6 @@ namespace DootEmUp.Gameplay
         private GameObject healthItem;
         [HideInInspector]
         public Transform healthItemSpawn;
-
-        public bool gameStarted;
 
         [HideInInspector]
         public GameObject curHealthItem {  get; private set; }
@@ -42,19 +42,28 @@ namespace DootEmUp.Gameplay
             {
                 instance = this;
             }
-
-            gameStarted = false; //Handled by GameState
         }
 
         public void GameStart()
         {
-            gameStarted = true; //Handled by GameState
+            UpdateGameState(GameState.Play);
             Time.timeScale = 1;
+        }
+
+        public void QuickStart()
+        {
+            throw new NotImplementedException();
+            //Start PCG with random seed
+        }
+
+        public void Play()
+        {
+            UpdateGameState(GameState.GenerateLevel);
         }
 
         private void Update()
         {
-            if (!gameStarted) //Handled by GameState
+            if (state != GameState.Play)
             {
                 return;
             }
@@ -117,16 +126,16 @@ namespace DootEmUp.Gameplay
 
         public void UpdateGameState(GameState newState)
         {
+            OnGameStateExit?.Invoke(state);
+
             state = newState;
 
             switch (newState)
             {
                 case GameState.MainMenu:
-                    SceneManager.LoadScene("MainMenu");
-                    break;
+                    throw new NotImplementedException();
                 case GameState.GenerateLevel:
-                    SceneManager.LoadScene("PCGScene");
-                    break;
+                    throw new NotImplementedException();
                 case GameState.Play:
                     Resume();
                     break;
@@ -148,7 +157,7 @@ namespace DootEmUp.Gameplay
                     break;
             }
 
-            OnGameStateChange?.Invoke(newState);
+            OnGameStateEnter?.Invoke(newState);
         }
     }
 

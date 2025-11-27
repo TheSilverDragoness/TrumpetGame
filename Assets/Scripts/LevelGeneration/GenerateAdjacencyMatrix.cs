@@ -42,6 +42,12 @@ namespace DootEmUp.PCG
         private string inputText;
         [SerializeField]
         private TMP_Text[] seedText;
+        [SerializeField]
+        private TMP_Text roomNumberText;
+        [SerializeField]
+        private TMP_Text connectionNumberText;
+        [SerializeField]
+        private TMP_Text gridSizeText;
 
         List<int> seq1 = new List<int>();
         List<int> seq2 = new List<int>();
@@ -63,6 +69,24 @@ namespace DootEmUp.PCG
             Debug.Log("Input Grabber String: " + str);
             inputText = str;
             Debug.Log("Input Seed Set to " + inputText);
+        }
+
+        public void GetMaxRooms(int _maxRooms)
+        {
+            maxNodes = _maxRooms;
+            roomNumberText.text = _maxRooms.ToString();
+        }
+
+        public void GetMaxConnections(int _maxConnections)
+        {
+            maxConnections = _maxConnections;
+            connectionNumberText.text = _maxConnections.ToString();
+        }
+
+        public void GetGridSize(int _gridSize)
+        {
+            gridSize = _gridSize;
+            gridSizeText.text = _gridSize.ToString();
         }
 
         private int GetSeed()
