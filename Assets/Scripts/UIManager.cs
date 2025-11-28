@@ -110,12 +110,12 @@ namespace DootEmUp.UI
 
         private void EnterMainMenu()
         {
-            throw new NotImplementedException();
+            GameStart();
         }
 
         private void ExitMainMenu()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         private void EnterPCG()
@@ -202,6 +202,7 @@ namespace DootEmUp.UI
             gameUI.SetActive(true);
             healthBar.SetActive(true);
             enemyCounter.gameObject.SetActive(false);
+            mainMenu.SetActive(true);
         }
 
         public void UpdateTimer(float timeLeft)

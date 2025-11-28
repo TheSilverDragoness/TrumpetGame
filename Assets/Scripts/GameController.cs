@@ -42,6 +42,8 @@ namespace DootEmUp.Gameplay
             {
                 instance = this;
             }
+
+            UpdateGameState(GameState.MainMenu);
         }
 
         public void GameStart()
@@ -133,9 +135,9 @@ namespace DootEmUp.Gameplay
             switch (newState)
             {
                 case GameState.MainMenu:
-                    throw new NotImplementedException();
+                    break;
                 case GameState.GenerateLevel:
-                    throw new NotImplementedException();
+                    break;
                 case GameState.Play:
                     Resume();
                     break;

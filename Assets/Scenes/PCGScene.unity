@@ -8510,7 +8510,10 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7817599238392653288, guid: e3ea5ed8f1528f1409be2da8d6b2f745, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1075613655}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2241952441581110303, guid: e3ea5ed8f1528f1409be2da8d6b2f745, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1728255940}
   m_SourcePrefab: {fileID: 100100000, guid: e3ea5ed8f1528f1409be2da8d6b2f745, type: 3}
 --- !u!224 &1257489510 stripped
 RectTransform:
@@ -11335,6 +11338,35 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1707626977}
   m_CullTransparentMesh: 1
+--- !u!1 &1728255936 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2241952441581110303, guid: e3ea5ed8f1528f1409be2da8d6b2f745, type: 3}
+  m_PrefabInstance: {fileID: 1257489509}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1728255940
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1728255936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be829b3d329c6c742a854bce797cbf9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainMenu: {fileID: 184938036}
+  loseScreen: {fileID: 1269186341}
+  winScreen: {fileID: 361785154}
+  pauseScreen: {fileID: 1959880706}
+  attributionsScreen: {fileID: 1693511610}
+  helpScreen: {fileID: 2126641308}
+  waveNumberText: {fileID: 346305252}
+  enemyCounter: {fileID: 1172337939}
+  waveCountdown: {fileID: 850895476}
+  healthBar: {fileID: 623530308}
+  compassUI: {fileID: 260609897}
+  gameUI: {fileID: 1271276185}
 --- !u!1001 &1728292758
 PrefabInstance:
   m_ObjectHideFlags: 0
