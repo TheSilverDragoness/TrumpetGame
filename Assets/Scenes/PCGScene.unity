@@ -859,7 +859,7 @@ GameObject:
   - component: {fileID: 209118455}
   - component: {fileID: 209118454}
   m_Layer: 5
-  m_Name: Text (TMP) (2)
+  m_Name: ConnectionNumberText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3809,7 +3809,7 @@ GameObject:
   - component: {fileID: 603209941}
   - component: {fileID: 603209942}
   m_Layer: 5
-  m_Name: PCG Slider 3
+  m_Name: GridSizeSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5972,7 +5972,7 @@ GameObject:
   - component: {fileID: 883145997}
   - component: {fileID: 883145996}
   m_Layer: 5
-  m_Name: Text (TMP) (1)
+  m_Name: RoomNumberText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6839,7 +6839,7 @@ GameObject:
   - component: {fileID: 1046175895}
   - component: {fileID: 1046175896}
   m_Layer: 5
-  m_Name: PCG Slider 2
+  m_Name: ConnectionNumberSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7004,7 +7004,7 @@ GameObject:
   - component: {fileID: 1075613657}
   - component: {fileID: 1075613656}
   m_Layer: 5
-  m_Name: Text (TMP) (3)
+  m_Name: GridSizeText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8483,6 +8483,10 @@ PrefabInstance:
     - target: {fileID: 6450425289832318714, guid: e3ea5ed8f1528f1409be2da8d6b2f745, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8124183084907844690, guid: e3ea5ed8f1528f1409be2da8d6b2f745, type: 3}
+      propertyPath: m_Name
+      value: InputSeedTitle
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -11796,7 +11800,7 @@ GameObject:
   - component: {fileID: 1813412461}
   - component: {fileID: 1813412462}
   m_Layer: 5
-  m_Name: PCG Slider 1
+  m_Name: RoomNumberSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
