@@ -2310,7 +2310,7 @@ GameObject:
   - component: {fileID: 413235159}
   - component: {fileID: 413235158}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: HelpScreenTitleText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2521,7 +2521,7 @@ GameObject:
   - component: {fileID: 439029720}
   - component: {fileID: 439029719}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: MainMenuTitleText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3914,7 +3914,7 @@ GameObject:
   - component: {fileID: 612571669}
   - component: {fileID: 612571668}
   m_Layer: 5
-  m_Name: Retry
+  m_Name: RetryButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9179,7 +9179,7 @@ GameObject:
   - component: {fileID: 1366971317}
   - component: {fileID: 1366971316}
   m_Layer: 5
-  m_Name: Exit
+  m_Name: ExitButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10585,7 +10585,7 @@ GameObject:
   - component: {fileID: 1666770185}
   - component: {fileID: 1666770184}
   m_Layer: 5
-  m_Name: Resume
+  m_Name: ResumeButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12255,7 +12255,7 @@ GameObject:
   - component: {fileID: 1879217690}
   - component: {fileID: 1879217689}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: ConrolsText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13203,7 +13203,7 @@ GameObject:
   - component: {fileID: 1995705044}
   - component: {fileID: 1995705043}
   m_Layer: 5
-  m_Name: Attributions
+  m_Name: AttributionsButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13336,7 +13336,7 @@ GameObject:
   - component: {fileID: 1999979160}
   - component: {fileID: 1999979159}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: PauseScreenTitleText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13471,7 +13471,7 @@ GameObject:
   - component: {fileID: 2003961399}
   - component: {fileID: 2003961398}
   m_Layer: 5
-  m_Name: SeedText (1)
+  m_Name: MouseSensitivityText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13970,7 +13970,7 @@ GameObject:
   - component: {fileID: 2082988596}
   - component: {fileID: 2082988595}
   m_Layer: 5
-  m_Name: NoteGuide
+  m_Name: NoteGuideButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -14564,7 +14564,7 @@ GameObject:
   - component: {fileID: 2142447211}
   - component: {fileID: 2142447210}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: AttributionsScreenTitleText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
